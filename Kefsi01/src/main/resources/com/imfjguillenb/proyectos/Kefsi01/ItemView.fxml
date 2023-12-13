@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.imfjguillenb.proyectos.Kefsi01.ItemViewController">
+       <Label fx:id="itemName" styleClass="item-label" HBox.hgrow="ALWAYS" />
+       <Label fx:id="itemUnits" styleClass="item-label" HBox.hgrow="ALWAYS" />
+       <Label fx:id="itemPrice" styleClass="item-label" HBox.hgrow="ALWAYS" />
+</HBox>

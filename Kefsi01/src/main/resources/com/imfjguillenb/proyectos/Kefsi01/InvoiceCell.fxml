@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+
+<HBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.imfjguillenb.proyectos.Kefsi01.InvoiceCellController">
+    <Label fx:id="invoiceNumberLabel" />
+    <Pane HBox.hgrow="ALWAYS"/>
+    <Label fx:id="invoiceDateLabel" />
+</HBox>
+

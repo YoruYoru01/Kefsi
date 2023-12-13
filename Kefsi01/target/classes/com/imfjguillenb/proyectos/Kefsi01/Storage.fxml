@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.imfjguillenb.proyectos.Kefsi01.StorageController">
+    <!-- Barra de búsqueda -->
+    <TextField fx:id="searchBar" promptText="Buscar..."/>
+    
+
+    <!-- Lista de items -->
+    <ListView fx:id="itemList" VBox.vgrow="ALWAYS">
+        <!-- Los items se añadirán aquí -->
+    </ListView>
+
+    <!-- Botones -->
+    <HBox spacing="10">
+        <Button text="Agregar" onAction="#openAddItemForm"/>
+        <Button text="Editar" onAction="#openEditItemForm"/>
+        <Button text="Eliminar" onAction="#removeItem"/>
+        <Button text="Importar Excel" onAction="#importExcel"/>
+        <Button text="Exportar Excel" onAction="#exportExcel"/>
+    </HBox>
+</VBox>
+

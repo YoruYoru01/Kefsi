@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<VBox fx:id="vbox" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.imfjguillenb.proyectos.Kefsi01.ItemDetailsController">
+    <Label fx:id="idLabel"/>
+    <Label fx:id="nameLabel"/>
+    <Label fx:id="unitsLabel"/>
+    <Label fx:id="priceLabel"/>
+    <Button text="Cerrar" onAction="#closeDialog"/>
+</VBox>

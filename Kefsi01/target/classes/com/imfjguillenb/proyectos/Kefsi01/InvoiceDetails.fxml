@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="com.imfjguillenb.proyectos.Kefsi01.InvoiceDetailsController"
+	spacing="10">
+
+	<Label text="Productos en factura" />
+	<ListView fx:id="itemListView" prefHeight="300.0" prefWidth="400.0" />
+	<Label fx:id="totalLabel" text="Total: 0.00€" />
+
+</VBox>
