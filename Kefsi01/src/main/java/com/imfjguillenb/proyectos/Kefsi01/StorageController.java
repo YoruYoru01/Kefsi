@@ -290,14 +290,19 @@ public class StorageController {
 
     @FXML
     private void importExcel() {
-        // para importar desde Excel
-    	FileChooser fileChooser = new FileChooser();
+    	// para importar a Excel
+        FileChooser fileChooser = new FileChooser();
         File file = fileChooser.showOpenDialog(null);
 
         if (file != null) {
             try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
                 String line;
+                boolean firstLine = true; // Para detectar la primera línea
                 while ((line = reader.readLine()) != null) {
+                    if (firstLine) {
+                        firstLine = false; // Omitir la primera línea (encabezados)
+                        continue;
+                    }
                     String[] data = line.split(",");
                     
                     Item item = new Item(data[0], data[1], Integer.parseInt(data[2]), Double.parseDouble(data[3]));
@@ -308,7 +313,6 @@ public class StorageController {
                 e.printStackTrace();
             }
         }
-    	
     }
 
     @FXML

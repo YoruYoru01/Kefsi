@@ -47,6 +47,9 @@ public class Item {
 		this.price = price;
 	}
 
-	
+	@Override
+    public String toString() {
+        return name + " (" + barcode + ")";
+    }
 
 }

@@ -1,0 +1,61 @@
+/* Estilo general para el VBox */
+.vbox {
+    -fx-alignment: center;
+    -fx-padding: 20px; 
+    -fx-spacing: 10px;
+    -fx-background-color: #f2f2f2; /* Color de fondo */
+}
+
+/* Estilo para el título de la aplicación */
+.titleLabel {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1e90ff; /* Color del texto */
+}
+
+/* Estilo para los campos de texto y contraseña */
+.text-field, .password-field {
+    -fx-pref-width: 250px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 16px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-border-color: #bfbfbf; /* Color del borde */
+}
+
+.text-field:focused, .password-field:focused {
+	-fx-pref-width: 200px;
+    -fx-border-color: #1e90ff; /* Color del borde al enfocar */
+}
+
+/* Estilo para el botón de inicio de sesión */
+.button {
+    -fx-background-color: #1e90ff; /* Color de fondo */
+    -fx-text-fill: white; /* Color del texto */
+    -fx-font-weight: bold;
+    -fx-pref-width: 250px;
+    -fx-pref-height: 40px;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.6), 5, 0, 0, 1);
+}
+
+.button:hover {
+    -fx-background-color: #187ad3; /* Color de fondo al pasar el mouse */
+}
+
+/* Estilo para la etiqueta del pie de página */
+.footerLabel {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666666; /* Color del texto */
+    -fx-alignment: bottom-right;
+    -fx-padding: 10px;
+}
+
+/* Estilo para el ImageView (logo) */
+.image-view {
+    -fx-fit-width: 100px; /* Ancho más pequeño */
+    -fx-fit-height: 100px; /* Alto más pequeño */
+    -fx-preserve-ratio: true;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.8), 10, 0, 0, 2);
+}

@@ -13,7 +13,7 @@
 
 	<ListView fx:id="invoiceListView" prefHeight="200.0" prefWidth="200.0" />
 	<HBox spacing="10">
-		<Button fx:id="addInvoiceButton" text="Añadir" />
-		<Button fx:id="deleteInvoiceButton" text="Eliminar" />
+		<Button fx:id="addInvoiceButton" text="Añadir" onAction="#openNewInvoiceWindow"/>
+		<Button fx:id="deleteInvoiceButton" text="Eliminar" onAction="#deleteInvoice"/>
 	</HBox>
 </VBox>

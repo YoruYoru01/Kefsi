@@ -5,9 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.imfjguillenb.proyectos.Kefsi01.PrincipalController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" 
+xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.imfjguillenb.proyectos.Kefsi01.PrincipalController"
+stylesheets="@../css/kefsiStyle.css">
 	<left>
-		<VBox fx:id="sideMenu" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+		<VBox fx:id="sideMenu" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER" stylesheets="@../css/kefsiStyle.css">
 			<children>
 
 				<ToggleButton fx:id="toggleMenuButton" onAction="#toggleMenu" text="≡" />

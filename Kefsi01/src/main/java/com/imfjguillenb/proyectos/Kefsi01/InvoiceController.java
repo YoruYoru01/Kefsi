@@ -4,6 +4,7 @@ package com.imfjguillenb.proyectos.Kefsi01;
 import java.io.IOException;
 
 import almacen.Item;
+import database.DataBaseHandler;
 import invoices.Invoice;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,14 +30,25 @@ public class InvoiceController {
 	    private TextField searchBar;
 	    
 	    private ObservableList<Invoice> invoices;
+	    
+	    private DataBaseHandler dbHandler;
 
 	    @FXML
 	    public void initialize() {
-	    	// Cargar las facturas en la ListView
+	    	
+	    	
+	    	//cargar las facturas desde bd
+	    	
+	    	dbHandler = new DataBaseHandler();
+	        invoices = dbHandler.getInvoices();
+	        invoiceListView.setItems(invoices);
+	    	
+	        /*
+	        // Cargar las facturas en la ListView
 	    	invoices = FXCollections.observableArrayList();
 	        invoiceListView.setItems(invoices);
 	        
-	    	/*// Crear ítems de ejemplo
+	    	// Crear ítems de ejemplo
 	        Item item1 = new Item(4, "Producto D", 2, 15.0);
 	        Item item2 = new Item(5, "Producto E", 1, 20.0);
 	        Item item3 = new Item(6, "Producto F", 3, 10.0); 
@@ -67,25 +79,24 @@ public class InvoiceController {
 	        
 	        //Lógica para abrir nueva pestaña
 	        
-	        invoiceListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-	            if (newValue != null) {
-	                openInvoiceDetails(newValue);
+	        invoiceListView.setOnMouseClicked(event -> {
+	            if (event.getClickCount() == 2 && !invoiceListView.getSelectionModel().isEmpty()) {
+	                Invoice selectedInvoice = invoiceListView.getSelectionModel().getSelectedItem();
+	                openInvoiceDetails(selectedInvoice);
 	            }
 	        });
 	        
 	    }
 	    
 	    private void openInvoiceDetails(Invoice selectedInvoice) {
-	    	
-	    	//La lógica que seguirá cuando abra la pestaña
 	        try {
 	            // Cargar el FXML para los detalles de la factura
 	            FXMLLoader loader = new FXMLLoader(getClass().getResource("InvoiceDetails.fxml"));
 	            Parent root = loader.load();
 
 	            // Obtener el controlador y establecer la factura seleccionada
-	            InvoiceDetailsController controller = loader.getController();
-	            controller.setInvoice(selectedInvoice);
+	            InvoiceDetailsController invoiceDetailsController = loader.getController();
+	            invoiceDetailsController.setInvoice(selectedInvoice);
 
 	            // Mostrar en una nueva ventana
 	            Stage stage = new Stage();
@@ -96,17 +107,42 @@ public class InvoiceController {
 	            e.printStackTrace();
 	        }
 	    }
-
+	    
 	    @FXML
-	    public void addInvoice(Invoice invoice) {
-	        // Abrir un diálogo para agregar una nueva factura
-	        invoices.add(invoice);
+	    private void openNewInvoiceWindow() {
+	    	
+	    	//Este nos abrirá para crear nuevas facturas
+	    	try {
+	            FXMLLoader loader = new FXMLLoader(getClass().getResource("NewInvoice.fxml"));
+	            Parent root = loader.load();
+
+	            NewInvoiceController newInvoiceController = loader.getController();
+	            newInvoiceController.setOnNewInvoiceAdded(this::addInvoice);
+
+	            Stage stage = new Stage();
+	            stage.setTitle("Nueva Factura");
+	            stage.setScene(new Scene(root));
+	            stage.show();
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }
 	    }
 
 	    @FXML
-	    public void deleteInvoice() {
-	        // Eliminar la factura seleccionada
-	        // ...
+	    public void addInvoice(Invoice invoice) {
+	        if (invoice != null) {
+	        	dbHandler.addInvoice(invoice);
+	            invoices.add(invoice);
+	        }
+	    }
+
+	    @FXML
+	    private void deleteInvoice() {
+	        Invoice selectedInvoice = invoiceListView.getSelectionModel().getSelectedItem();
+	        if (selectedInvoice != null) {
+	            dbHandler.deleteInvoice(selectedInvoice.getId());
+	            invoices.remove(selectedInvoice);
+	        }
 	    }
 
 }

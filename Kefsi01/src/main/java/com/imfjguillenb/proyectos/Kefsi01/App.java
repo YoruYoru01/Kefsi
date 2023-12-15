@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-
 import database.DataBaseHandler;
 
 /**
@@ -16,19 +15,22 @@ import database.DataBaseHandler;
 public class App extends Application {
 
     private static Scene scene;
-    
-    private DataBaseHandler dbHandler;
+    private static Stage primaryStage; // Referencia al escenario principal
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("Principal"), 640, 480);
-        scene.getStylesheets().add(getClass().getResource("kefsiStyle.css").toExternalForm());
+        primaryStage = stage; // Guardar el escenario principal
+        scene = new Scene(loadFXML("Login"), 400, 300);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
-    static void setRoot(String fxml) throws IOException {
+    public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
+        if("Principal".equals(fxml)) {
+            primaryStage.setTitle("Kefsi App");
+        }
     }
 
     private static Parent loadFXML(String fxml) throws IOException {
@@ -37,8 +39,11 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-    	DataBaseHandler dbHandler = new DataBaseHandler();
         launch();
     }
 
+    // Método para cambiar a la vista principal
+    public static void showMainView() throws IOException {
+        setRoot("Principal");
+    }
 }

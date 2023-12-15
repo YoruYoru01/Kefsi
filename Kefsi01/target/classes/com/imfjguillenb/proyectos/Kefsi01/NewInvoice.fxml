@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.imfjguillenb.proyectos.Kefsi01.NewInvoiceController">
+   <children>
+       <TextField fx:id="invoiceDateField" promptText="Fecha" />
+      <TextField fx:id="itemSearchField" promptText="Buscar ítem por nombre o código de barras"/>
+      <ListView fx:id="searchResultsListView" maxHeight="100" prefHeight="100"/>
+       <Button onAction="#addItemToInvoice" text="Agregar Ítem" />
+       <ListView fx:id="selectedItemsListView" maxHeight="150" prefHeight="150"/>
+       <Button onAction="#saveInvoice" text="Guardar Factura" />
+   </children>
+</VBox>

@@ -30,7 +30,7 @@ public class InvoiceDetailsController {
                     protected void updateItem(Item item, boolean empty) {
                         super.updateItem(item, empty);
                         if (item != null && !empty) {
-                            setText(item.getName() + " - " + item.getUnits() + " unidades - $" + item.getPrice());
+                            setText(item.getName() + " - $" + item.getPrice());
                         } else {
                             setText(null);
                         }

@@ -15,3 +15,5 @@ com\imfjguillenb\proyectos\Kefsi01\ItemDetailsController.class
 database\DataBaseHandler.class
 com\imfjguillenb\proyectos\Kefsi01\PrincipalController.class
 com\imfjguillenb\proyectos\Kefsi01\InvoiceDetailsController.class
+com\imfjguillenb\proyectos\Kefsi01\LoginController.class
+com\imfjguillenb\proyectos\Kefsi01\NewInvoiceController.class

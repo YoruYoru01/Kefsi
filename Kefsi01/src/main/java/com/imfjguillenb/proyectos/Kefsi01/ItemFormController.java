@@ -23,7 +23,7 @@ public class ItemFormController {
     private Consumer<Item> saveHandler;
 
     public void initialize() {
-        // Inicialización si es necesaria
+        
     }
 
     public void setItem(Item item) {

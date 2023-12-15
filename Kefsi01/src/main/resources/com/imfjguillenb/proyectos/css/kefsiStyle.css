@@ -1,0 +1,67 @@
+/* Estilo general de la aplicaci n */
+.root {
+    -fx-font-family: "Arial", sans-serif;
+    -fx-background-color: #F7F7F7;
+}
+
+/* Estilo para la barra lateral (submen ) */
+VBox {
+    -fx-background-color: #333;
+    -fx-padding: 20px 0;
+    -fx-spacing: 15px;
+}
+
+Button {
+    -fx-background-color: #333;
+    -fx-text-fill: white;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+}
+
+    Button:hover {
+        -fx-background-color: #777;
+    }
+
+ToggleButton {
+    -fx-background-color: #333;
+    -fx-text-fill: white;
+    -fx-border-radius: 15px;
+    -fx-background-radius: 15px;
+    -fx-padding: 10px 20px;
+    -fx-font-weight: bold;
+}
+
+    ToggleButton:hover {
+        -fx-background-color: #555;
+    }
+
+/* Estilo para el  rea de contenido principal */
+StackPane {
+    -fx-padding: 20px;
+}
+
+
+/* Clase para los botones en el item box */
+.item-button {
+    -fx-font-size: 10px;
+    -fx-padding: 3px 8px;
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-border-radius: 2px;
+}
+
+/* Efecto hover para los botones en el item box */
+	.item-button:hover {
+    	-fx-background-color: #45a049;
+	}
+
+/* Estilo para las etiquetas de texto en el item box */
+.item-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 15px;  /* padding izquierda y derecha */
+    -fx-text-fill: #333333;
+}
+
