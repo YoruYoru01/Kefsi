@@ -189,69 +189,7 @@ public class DataBaseHandler {
     //de las facturas
     
     ///////////////////////////////////////
-    
- /* Primer metodo para crear una factura NO SOPORTADO POR SQLITE :(
-    public void addInvoice(Invoice invoice) {
-        String sqlInvoice = "INSERT INTO Invoices(date, total) VALUES(?,?)";
-        String sqlItems = "INSERT INTO InvoiceItems(invoice_id, item_barcode, quantity) VALUES(?,?,?)";
-
-        Connection conn = null;
-        PreparedStatement pstmtInvoice = null;
-        PreparedStatement pstmtItems = null;
-        ResultSet generatedKeys = null;
-        try {
-            conn = this.connect();
-            conn.setAutoCommit(false);
-
-            // Insertar la factura
-            pstmtInvoice = conn.prepareStatement(sqlInvoice, Statement.RETURN_GENERATED_KEYS);
-            pstmtInvoice.setString(1, invoice.getDate());
-            pstmtInvoice.setDouble(2, invoice.getTotal());
-            int affectedRows = pstmtInvoice.executeUpdate();
-
-            if (affectedRows == 0) {
-                throw new SQLException("Creating invoice failed, no rows affected.");
-            }
-
-            generatedKeys = pstmtInvoice.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                invoice.setId(generatedKeys.getInt(1));
-            } else {
-                throw new SQLException("Creating invoice failed, no ID obtained.");
-            }
-
-            // Insertar cada ítem de la factura
-            pstmtItems = conn.prepareStatement(sqlItems);
-            for (Item item : invoice.getItems()) {
-                pstmtItems.setInt(1, invoice.getId());
-                pstmtItems.setString(2, item.getBarcode());
-                pstmtItems.setInt(3, item.getUnits());
-                pstmtItems.executeUpdate();
-            }
-
-            conn.commit();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-            if (conn != null) {
-                try {
-                    conn.rollback();
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        } finally {
-            // Cerrar todos los recursos utilizados
-            try {
-                if (generatedKeys != null) generatedKeys.close();
-                if (pstmtItems != null) pstmtItems.close();
-                if (pstmtInvoice != null) pstmtInvoice.close();
-                if (conn != null) conn.close();
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-    } */
-    
+  
     /*
      * Este enfoque utiliza last_insert_rowid() para obtener el ID de la última 
      * fila insertada en la base de datos, que corresponde a la factura recién creada. 
@@ -332,6 +270,7 @@ public class DataBaseHandler {
                 double total = rs.getDouble("total");
 
                 Invoice invoice = new Invoice(id, date);
+                invoice.setTotal(total);
                 invoice.addItems(getItemsForInvoice(id));
                 invoices.add(invoice);
             }

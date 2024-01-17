@@ -42,25 +42,6 @@ public class InvoiceController {
 	    	dbHandler = new DataBaseHandler();
 	        invoices = dbHandler.getInvoices();
 	        invoiceListView.setItems(invoices);
-	    	
-	        /*
-	        // Cargar las facturas en la ListView
-	    	invoices = FXCollections.observableArrayList();
-	        invoiceListView.setItems(invoices);
-	        
-	    	// Crear ítems de ejemplo
-	        Item item1 = new Item(4, "Producto D", 2, 15.0);
-	        Item item2 = new Item(5, "Producto E", 1, 20.0);
-	        Item item3 = new Item(6, "Producto F", 3, 10.0); 
-
-	        // Crear una factura de ejemplo y añadir ítems
-	        Invoice invoiceExample = new Invoice(1);
-	        invoiceExample.addItem(item1);
-	        invoiceExample.addItem(item2);
-	        invoiceExample.addItem(item3); 
-
-	        // Añadir la factura de ejemplo a la lista observable
-	        invoices.add(invoiceExample); */
 	        
 	        //Darle el formato para que muestre el contenido de nuestro objeto
 	    	
@@ -126,6 +107,15 @@ public class InvoiceController {
 	        } catch (IOException e) {
 	            e.printStackTrace();
 	        }
+	    	
+	    }
+	    
+	 // Método para actualizar la lista de facturas
+	    public void updateInvoiceList(Invoice invoice) {
+	        if (invoice != null) {
+	            dbHandler.addInvoice(invoice);
+	            invoices.add(invoice);
+	        }
 	    }
 
 	    @FXML
@@ -134,7 +124,7 @@ public class InvoiceController {
 	        	dbHandler.addInvoice(invoice);
 	            invoices.add(invoice);
 	        }
-	    }
+	    } 
 
 	    @FXML
 	    private void deleteInvoice() {

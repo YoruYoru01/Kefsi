@@ -46,47 +46,72 @@ public class Invoice {
 	public void setItems(List<Item> items) {
 		this.items = items;
 	}
+	
+	// Actualiza el total cada vez que se llama
+    public double getTotal() {
+        calculateTotal();  // Calcula y actualiza el total
+        return total;
+    }
 
-	public double getTotal() {
+    public void setTotal(double total) {
+        this.total = total;
+    }
+
+    public void addItem(Item item) {
+        if (item != null) {
+            this.items.add(item);
+            calculateTotal();  
+        }
+    }
+
+    public void addItems(ObservableList<Item> items) {
+        if (items != null) {
+            this.items.addAll(items);
+            calculateTotal();  
+        }
+    }
+
+    // Método para calcular el total de la factura
+    private void calculateTotal() {
         BigDecimal total = BigDecimal.ZERO;
-        for (Item item : items) {
+        for (Item item : this.items) {
             BigDecimal price = BigDecimal.valueOf(item.getPrice());
             BigDecimal quantity = BigDecimal.valueOf(item.getUnits());
             total = total.add(price.multiply(quantity));
         }
-        return total.setScale(2, RoundingMode.HALF_UP).doubleValue();
+        this.total = total.setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+	
+/*public double getTotal() {
+	    BigDecimal total = BigDecimal.ZERO;
+	    for (Item item : this.items) {
+	        BigDecimal price = BigDecimal.valueOf(item.getPrice());
+	        BigDecimal quantity = BigDecimal.valueOf(item.getUnits());
+	        total = total.add(price.multiply(quantity));
+	    }
+	    return total.setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
 	public void setTotal(double total) {
 		this.total = total;
 	}
-
-	/*public void addItem(Item item) {
-		items.add(item);
-		total += item.getPrice() * item.getUnits();
-
-	} */
 	
 	 public void addItem(Item item) {
 	        if (item != null) {
 	            this.items.add(item);
-	            updateTotal();
 	        }
 	    }
 
 	    public void addItems(ObservableList<Item> items) {
 	        if (items != null) {
 	            this.items.addAll(items);
-	            updateTotal();
 	        }
 	    }
 
-	    private void updateTotal() {
-	        total = 0.0;
-	        for (Item item : this.items) {
-	            total += item.getPrice() * item.getUnits();
-	        }
-	    }
+	    public double getStoredTotal() {
+	        return total;
+	    } */
     
     
 }

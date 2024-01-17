@@ -46,7 +46,7 @@ public class InvoiceDetailsController {
         ObservableList<Item> items = FXCollections.observableArrayList(invoice.getItems());
         itemListView.setItems(items);
 
-        // Para luego calcular precio total.
+     // Mostrar el precio total almacenado en la factura
         totalLabel.setText("Total: $" + invoice.getTotal());
         
         

@@ -11,6 +11,7 @@ import invoices.Invoice;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -27,6 +28,8 @@ public class NewInvoiceController {
     private ObservableList<Item> selectedItems = FXCollections.observableArrayList();
 
     private DataBaseHandler dbHandler;
+    
+  
 
     @FXML
     public void initialize() {
@@ -61,11 +64,13 @@ public class NewInvoiceController {
         searchResultsListView.setItems(filteredItems);
     }
     
-  /*nos encontramos el siguiente problema Cannot make a static reference to the non-static method addInvoice(Invoice) from the type InvoiceController, 
+  
+    
+   /*nos encontramos el siguiente problema Cannot make a static reference to the non-static method addInvoice(Invoice) from the type InvoiceController, 
    * buscando he encontrado el metodo de "callback", así que lo he implementado.
    */
     
-    public void setOnNewInvoiceAdded(Consumer<Invoice> callback) {
+    public void setOnNewInvoiceAdded(@SuppressWarnings("exports") Consumer<Invoice> callback) {
         this.onNewInvoiceAdded = callback;
     }
     
@@ -94,27 +99,28 @@ public class NewInvoiceController {
 
             // Calcular las nuevas unidades y actualizar en la base de datos
             int newUnits = currentUnitsInStorage - unitsToDeduct;
-            if (newUnits < 0) {
+            if (newUnits <= 0) {
                 // Manejar el caso donde se intenta vender más de lo disponible
+            	showAlert("Sin stock", "No hay suficientes unidades en el almacén para el ítem: " + item.getName());
                 System.out.println("No hay suficientes unidades en el almacén para el ítem: " + item.getName());
-                continue; 
             }
             dbHandler.updateItemUnits(item.getBarcode(), newUnits);
         }
 
-        dbHandler.addInvoice(newInvoice);
+        //dbHandler.addInvoice(newInvoice);
 
         if (onNewInvoiceAdded != null) {
             onNewInvoiceAdded.accept(newInvoice);
+            
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }   
 
 }
