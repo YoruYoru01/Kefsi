@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import almacen.Item;
 import database.DataBaseHandler;
 import invoices.Invoice;
+import invoices.InvoiceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -72,7 +73,7 @@ public class NewInvoiceController {
     
     public void setOnNewInvoiceAdded(@SuppressWarnings("exports") Consumer<Invoice> callback) {
         this.onNewInvoiceAdded = callback;
-    }
+    } 
     
     @FXML
     private void addItemToInvoice() {
@@ -87,11 +88,13 @@ public class NewInvoiceController {
     
     @FXML
     private void saveInvoice() {
-        String date = invoiceDateField.getText();
+    	String date = invoiceDateField.getText();
         Invoice newInvoice = new Invoice(0, date); // ID 0 como placeholder
 
         for (Item item : selectedItems) {
-            newInvoice.addItem(item);
+        	//aqui estamos creando una copia del item para "congelar" el item en la factura
+        	 InvoiceItem invoiceItem = new InvoiceItem(item.getBarcode(), item.getName(), item.getUnits(), item.getPrice());
+             newInvoice.addInvoiceItem(invoiceItem);
 
             // Obtener la cantidad actual del item en el almacen
             int currentUnitsInStorage = dbHandler.getItemUnits(item.getBarcode());
@@ -99,7 +102,7 @@ public class NewInvoiceController {
 
             // Calcular las nuevas unidades y actualizar en la base de datos
             int newUnits = currentUnitsInStorage - unitsToDeduct;
-            if (newUnits <= 0) {
+            if (newUnits < 0) {
                 // Manejar el caso donde se intenta vender más de lo disponible
             	showAlert("Sin stock", "No hay suficientes unidades en el almacén para el ítem: " + item.getName());
                 System.out.println("No hay suficientes unidades en el almacén para el ítem: " + item.getName());
@@ -112,7 +115,7 @@ public class NewInvoiceController {
         if (onNewInvoiceAdded != null) {
             onNewInvoiceAdded.accept(newInvoice);
             
-        }
+        } 
     }
     
     private void showAlert(String title, String content) {

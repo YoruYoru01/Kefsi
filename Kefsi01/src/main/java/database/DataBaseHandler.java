@@ -11,6 +11,7 @@ import java.util.List;
 
 import almacen.Item;
 import invoices.Invoice;
+import invoices.InvoiceItem;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
@@ -47,7 +48,7 @@ public class DataBaseHandler {
     
     public void createNewTables() {
         // SQL statement for creating new tables
-        String createTableInvoices = "CREATE TABLE IF NOT EXISTS invoices (\n"
+    	String createTableInvoices = "CREATE TABLE IF NOT EXISTS invoices (\n"
                 + "    id integer PRIMARY KEY,\n"
                 + "    date text NOT NULL,\n"
                 + "    total real NOT NULL\n"
@@ -65,9 +66,10 @@ public class DataBaseHandler {
         String createTableInvoiceItems = "CREATE TABLE IF NOT EXISTS InvoiceItems (\n"
         	    + "    invoice_id integer NOT NULL,\n"
         	    + "    item_barcode text NOT NULL,\n"
+        	    + "    item_name text NOT NULL,\n"
         	    + "    quantity integer NOT NULL,\n"
-        	    + "    FOREIGN KEY (invoice_id) REFERENCES invoices (id),\n"
-        	    + "    FOREIGN KEY (item_barcode) REFERENCES items (barcode)\n"
+        	    + "    price real NOT NULL,\n"
+        	    + "    FOREIGN KEY (invoice_id) REFERENCES invoices (id)\n"
         	    + ");";
         
         String createTableUsers = "CREATE TABLE IF NOT EXISTS users (\n"
@@ -197,7 +199,7 @@ public class DataBaseHandler {
      * */
     public void addInvoice(Invoice invoice) {
         String sqlInvoice = "INSERT INTO Invoices(date, total) VALUES(?,?)";
-        String sqlItems = "INSERT INTO InvoiceItems(invoice_id, item_barcode, quantity) VALUES(?,?,?)";
+        String sqlItems = "INSERT INTO InvoiceItems(invoice_id, item_barcode, item_name, quantity, price) VALUES(?,?,?,?,?)";
         String sqlGetId = "SELECT last_insert_rowid()";
 
         Connection conn = null;
@@ -224,10 +226,12 @@ public class DataBaseHandler {
 
             // Insertar cada ítem de la factura
             pstmtItems = conn.prepareStatement(sqlItems);
-            for (Item item : invoice.getItems()) {
+            for (InvoiceItem invoiceItem : invoice.getInvoiceItems()) {
                 pstmtItems.setInt(1, invoice.getId());
-                pstmtItems.setString(2, item.getBarcode());
-                pstmtItems.setInt(3, item.getUnits());
+                pstmtItems.setString(2, invoiceItem.getBarcode());
+                pstmtItems.setString(3, invoiceItem.getName());
+                pstmtItems.setInt(4, invoiceItem.getQuantity());
+                pstmtItems.setDouble(5, invoiceItem.getPrice());
                 pstmtItems.executeUpdate();
             }
 
@@ -271,7 +275,10 @@ public class DataBaseHandler {
 
                 Invoice invoice = new Invoice(id, date);
                 invoice.setTotal(total);
-                invoice.addItems(getItemsForInvoice(id));
+                ObservableList<InvoiceItem> invoiceItems = getInvoiceItemsForInvoice(id);
+                for (InvoiceItem invoiceItem : invoiceItems) {
+                    invoice.addInvoiceItem(invoiceItem);
+                }
                 invoices.add(invoice);
             }
         } catch (SQLException e) {
@@ -282,9 +289,9 @@ public class DataBaseHandler {
     
     //metodo para recuperar los items de las facturas
     
-    public ObservableList<Item> getItemsForInvoice(int invoiceId) {
-        ObservableList<Item> items = FXCollections.observableArrayList();
-        String sql = "SELECT i.barcode, i.name, i.units, i.price FROM Items i INNER JOIN InvoiceItems ii ON i.barcode = ii.item_barcode WHERE ii.invoice_id = ?";
+    public ObservableList<InvoiceItem> getInvoiceItemsForInvoice(int invoiceId) {
+        ObservableList<InvoiceItem> invoiceItems = FXCollections.observableArrayList();
+        String sql = "SELECT item_barcode, item_name, quantity, price FROM InvoiceItems WHERE invoice_id = ?";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -292,16 +299,16 @@ public class DataBaseHandler {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                String barcode = rs.getString("barcode");
-                String name = rs.getString("name");
-                int units = rs.getInt("units");
+                String barcode = rs.getString("item_barcode");
+                String name = rs.getString("item_name");
+                int quantity = rs.getInt("quantity");
                 double price = rs.getDouble("price");
-                items.add(new Item(barcode, name, units, price));
+                invoiceItems.add(new InvoiceItem(barcode, name, quantity, price));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return items;
+        return invoiceItems;
     }
 
     // Método para eliminar una factura

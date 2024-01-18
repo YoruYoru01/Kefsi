@@ -14,6 +14,8 @@ public class Invoice {
 	private String date;
 	private List<Item> items;
 	private double total;
+	
+	private List<InvoiceItem> invoiceItems;
 
 	public Invoice(int id, String date) {
 		super();
@@ -21,6 +23,8 @@ public class Invoice {
 		this.date = date;
 		this.items = new ArrayList<>();
 		this.total = 0.0;
+		
+		this.invoiceItems = new ArrayList<>();
 	}
 
 	public int getId() {
@@ -74,44 +78,25 @@ public class Invoice {
     // Método para calcular el total de la factura
     private void calculateTotal() {
         BigDecimal total = BigDecimal.ZERO;
-        for (Item item : this.items) {
-            BigDecimal price = BigDecimal.valueOf(item.getPrice());
-            BigDecimal quantity = BigDecimal.valueOf(item.getUnits());
+        for (InvoiceItem invoiceItem : this.invoiceItems) {
+            BigDecimal price = BigDecimal.valueOf(invoiceItem.getPrice());
+            BigDecimal quantity = BigDecimal.valueOf(invoiceItem.getQuantity());
             total = total.add(price.multiply(quantity));
         }
         this.total = total.setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
 	
-/*public double getTotal() {
-	    BigDecimal total = BigDecimal.ZERO;
-	    for (Item item : this.items) {
-	        BigDecimal price = BigDecimal.valueOf(item.getPrice());
-	        BigDecimal quantity = BigDecimal.valueOf(item.getUnits());
-	        total = total.add(price.multiply(quantity));
-	    }
-	    return total.setScale(2, RoundingMode.HALF_UP).doubleValue();
+    //correlacionar las facturas con los items de facturas para que no actualice con los items de almacen.
+ // Método para añadir múltiples InvoiceItems
+    public void addInvoiceItem(InvoiceItem invoiceItem) {
+        if (invoiceItem != null) {
+            this.invoiceItems.add(invoiceItem);
+        }
     }
 
-	public void setTotal(double total) {
-		this.total = total;
-	}
-	
-	 public void addItem(Item item) {
-	        if (item != null) {
-	            this.items.add(item);
-	        }
-	    }
-
-	    public void addItems(ObservableList<Item> items) {
-	        if (items != null) {
-	            this.items.addAll(items);
-	        }
-	    }
-
-	    public double getStoredTotal() {
-	        return total;
-	    } */
-    
+    public List<InvoiceItem> getInvoiceItems() {
+        return invoiceItems;
+    }
     
 }

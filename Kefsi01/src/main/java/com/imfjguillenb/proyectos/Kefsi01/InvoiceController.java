@@ -118,6 +118,7 @@ public class InvoiceController {
 	        }
 	    }
 
+	    // Método para añadir facturas
 	    @FXML
 	    public void addInvoice(Invoice invoice) {
 	        if (invoice != null) {
@@ -125,7 +126,7 @@ public class InvoiceController {
 	            invoices.add(invoice);
 	        }
 	    } 
-
+	 // Método para eliminar facturas
 	    @FXML
 	    private void deleteInvoice() {
 	        Invoice selectedInvoice = invoiceListView.getSelectionModel().getSelectedItem();
