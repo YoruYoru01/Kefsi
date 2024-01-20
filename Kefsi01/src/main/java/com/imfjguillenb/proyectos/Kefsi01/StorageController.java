@@ -17,6 +17,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -48,17 +49,6 @@ public class StorageController {
         
         
         itemList.setItems(filteredItems);
-    	
-    	
-    	/*
-    	// Crear algunos ítems de ejemplo
-        items = FXCollections.observableArrayList(
-            new Item(1, "Producto A", 10, 10.23),
-            new Item(2, "Producto B", 20, 23.12),
-            new Item(3, "Producto C", 30, 43.34)
-        );
-
-        itemList.setItems(items); */
         
         
         // Añadir un listener al campo de búsqueda
@@ -71,7 +61,8 @@ public class StorageController {
 
                 // Compara el nombre del ítem con el texto de búsqueda
                 String lowerCaseFilter = newValue.toLowerCase();
-                return item.getName().toLowerCase().contains(lowerCaseFilter);
+                return item.getName().toLowerCase().contains(lowerCaseFilter)||
+                       item.getBarcode().toLowerCase().contains(lowerCaseFilter);
             });
         });
 
@@ -208,31 +199,7 @@ public class StorageController {
         }
     }
 
-    /*@FXML
-    private void addItem() {
-    	
-    	 String name = nameField.getText();
-    	    int units;
-    	    double price;
-
-    	    try {
-    	        units = Integer.parseInt(unitsField.getText());
-    	        price = Double.parseDouble(priceField.getText());
-    	    } catch (NumberFormatException e) {
-    	        // Manejar el error si los números no son válidos
-    	        return;
-    	    }
-    	    
-    	    Item newItem = new Item(0, name, units, price); // 0 como ID, ya que la base de datos asignará el ID
-    	    dbHandler.addItem(newItem); // Añadir el item a la base de datos
-    	    items.add(newItem); // Añadir a la lista observable para actualizar la UI
-
-    	    // Limpiar los campos después de añadir
-    	    nameField.setText("");
-    	    unitsField.setText("");
-    	    priceField.setText("");
-      
-    } */
+  
     
  // Método para establecer el ítem seleccionado desde la interfaz de usuario
     public void setSelectedItem(Item item) {
@@ -242,39 +209,7 @@ public class StorageController {
         editPriceField.setText(String.format("%.2f", item.getPrice()));
     }
     
-  /* 
- // Método que se llama cuando se confirman las ediciones
-    @FXML
-    private void updateItem() {
-        if (selectedItem == null) {
-            // Manejar el caso de no tener un ítem seleccionado
-            return;
-        }
 
-        String newName = editNameField.getText();
-        int newUnits;
-        double newPrice;
-
-        try {
-            newUnits = Integer.parseInt(editUnitsField.getText());
-            newPrice = Double.parseDouble(editPriceField.getText());
-        } catch (NumberFormatException e) {
-            // Manejar el error si los números no son válidos
-            return;
-        }
-
-        selectedItem.setName(newName);
-        selectedItem.setUnits(newUnits);
-        selectedItem.setPrice(newPrice);
-
-        dbHandler.updateItem(selectedItem); // Actualizar el ítem en la base de datos
-
-        // Actualizar la lista observable
-        itemList.refresh();
-
-        // Limpiar los campos o cerrar el diálogo de edición
-    } */
-    
     @FXML
     private void removeItem() {
         // para eliminar un item
@@ -306,12 +241,18 @@ public class StorageController {
                     String[] data = line.split(",");
                     
                     Item item = new Item(data[0], data[1], Integer.parseInt(data[2]), Double.parseDouble(data[3]));
-                    dbHandler.addItem(item); // Añadir a la base de datos
-                    items.add(item); // Añadir a la lista observable
+                    if (dbHandler.itemExists(item.getBarcode())) {
+                        dbHandler.updateItem(item); // Actualizar el ítem existente
+                    } else {
+                        dbHandler.addItem(item); // Añadir como nuevo ítem
+                    }
                 }
             } catch (Exception e) {
+            	showAlert("Error Inesperado","Ha ocurrido un error inesperado, si el problema persiste ponerse en contacto con su técnico");
                 e.printStackTrace();
             }
+         // Recargar la lista observable
+            reloadItemsList();
         }
     }
 
@@ -323,13 +264,33 @@ public class StorageController {
         File file = fileChooser.showSaveDialog(null);
 
         if (file != null) {
+        	
+
+            // Escribir los datos de los ítems
             try (PrintWriter writer = new PrintWriter(file)) {
+            	// Escribir los encabezados de las columnas
+                writer.println("Código de Barras,Nombre,Unidades,Precio");
+                // Escribir los datos de los ítems
                 for (Item item : items) {
                     writer.println(item.getBarcode() + "," + item.getName() + "," + item.getUnits() + "," + item.getPrice());
                 }
             } catch (Exception e) {
+            	showAlert("Error Inesperado","Ha ocurrido un error inesperado, si el problema persiste ponerse en contacto con su técnico");
                 e.printStackTrace();
             }
         }
     }
+    
+    private void reloadItemsList() {
+        items.clear(); // Limpiar la lista actual
+        items.addAll(dbHandler.getItems()); // Recargar desde la base de datos
+    }
+    
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    } 
 }

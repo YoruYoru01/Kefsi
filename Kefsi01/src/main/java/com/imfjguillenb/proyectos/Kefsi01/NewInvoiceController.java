@@ -91,30 +91,32 @@ public class NewInvoiceController {
     	String date = invoiceDateField.getText();
         Invoice newInvoice = new Invoice(0, date); // ID 0 como placeholder
 
+        // Verificar si todos los items tienen suficientes unidades en el almacén
         for (Item item : selectedItems) {
-        	//aqui estamos creando una copia del item para "congelar" el item en la factura
-        	 InvoiceItem invoiceItem = new InvoiceItem(item.getBarcode(), item.getName(), item.getUnits(), item.getPrice());
-             newInvoice.addInvoiceItem(invoiceItem);
-
-            // Obtener la cantidad actual del item en el almacen
             int currentUnitsInStorage = dbHandler.getItemUnits(item.getBarcode());
-            int unitsToDeduct = item.getUnits(); // La cantidad a disminuir en el almacen
+            int unitsToDeduct = item.getUnits();
 
-            // Calcular las nuevas unidades y actualizar en la base de datos
-            int newUnits = currentUnitsInStorage - unitsToDeduct;
-            if (newUnits < 0) {
-                // Manejar el caso donde se intenta vender más de lo disponible
-            	showAlert("Sin stock", "No hay suficientes unidades en el almacén para el ítem: " + item.getName());
-                System.out.println("No hay suficientes unidades en el almacén para el ítem: " + item.getName());
+            if (currentUnitsInStorage - unitsToDeduct < 0) {
+                // Si no hay suficientes unidades, mostrar una alerta y detener el proceso
+                showAlert("Sin stock", "No hay suficientes unidades en el almacén para el ítem: " + item.getName());
+                return; 
             }
+        }
+
+        // Si todos los items tienen suficientes unidades, continuar con la creación de la factura y actualización del almacén
+        for (Item item : selectedItems) {
+            InvoiceItem invoiceItem = new InvoiceItem(item.getBarcode(), item.getName(), item.getUnits(), item.getPrice());
+            newInvoice.addInvoiceItem(invoiceItem);
+
+            // Actualizar las unidades en el almacén
+            int currentUnitsInStorage = dbHandler.getItemUnits(item.getBarcode());
+            int newUnits = currentUnitsInStorage - item.getUnits();
             dbHandler.updateItemUnits(item.getBarcode(), newUnits);
         }
 
-        //dbHandler.addInvoice(newInvoice);
-
+        
         if (onNewInvoiceAdded != null) {
             onNewInvoiceAdded.accept(newInvoice);
-            
         } 
     }
     

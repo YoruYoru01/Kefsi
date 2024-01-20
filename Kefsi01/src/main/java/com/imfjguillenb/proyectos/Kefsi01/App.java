@@ -20,7 +20,7 @@ public class App extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         primaryStage = stage; // Guardar el escenario principal
-        scene = new Scene(loadFXML("Login"), 400, 300);
+        scene = new Scene(loadFXML("Login"));
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();

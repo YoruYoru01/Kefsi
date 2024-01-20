@@ -53,16 +53,43 @@ public class ItemFormController {
     	try {
 
             // Lógica para guardar el ítem...
-            
+    		
             String barcode = barcodeField.getText();
             String name = nameField.getText();
             int units = Integer.parseInt(unitsField.getText());
             double price = Double.parseDouble(priceField.getText());
-           // int units = Integer.parseInt(unitsField.getText());
-           // double price = Double.parseDouble(priceField.getText());
+            
+            //verifiaciones pertinentes
+            
+            // Verificar si el barcode está vacío
+            
+            if (barcode == null || barcode.trim().isEmpty()) {
+                showAlert("Dato Faltante", "El código de barras no puede estar vacío.");
+                return;
+            }
+
+            // Verificar si el nombre está vacío
+            
+            if (name == null || name.trim().isEmpty()) {
+                showAlert("Dato Faltante", "El nombre del producto no puede estar vacío.");
+                return;
+            }
+
+            // Verificar si las unidades o el precio son valores negativos o cero
+            if (units < 0) {
+                showAlert("Valor Inválido", "Las unidades deben ser un número positivo.");
+                return;
+            }
+
+            if (price < 0) {
+                showAlert("Valor Inválido", "El precio no puede ser negativo.");
+                return;
+            }
+            
+            //continuamos la creación o actualización del item
 
             if (currentItem == null) {
-                currentItem = new Item(barcode, name, units, price); // 0 para el ID, ya que será generado por la base de datos
+                currentItem = new Item(barcode, name, units, price);
             } else {
             	currentItem.setBarcode(barcode);
                 currentItem.setName(name);

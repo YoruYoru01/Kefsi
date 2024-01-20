@@ -55,7 +55,7 @@ public class DataBaseHandler {
                 + ");";
 
         String createTableItems = "CREATE TABLE IF NOT EXISTS items (\n"
-                + "    barcode text PRIMARY KEY,\n"
+                + "    barcode text PRIMARY KEY NOT NULL,\n"
                 + "    name text NOT NULL,\n"
                 + "    units integer NOT NULL,\n"
                 + "    price real NOT NULL,\n"
